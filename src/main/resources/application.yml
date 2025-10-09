@@ -1,0 +1,71 @@
+spring:
+  profiles:
+    active: dev
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: profile, email
+
+  ai:
+    model:
+      chat: google-genai
+    google:
+      genai:
+        project-id: ${PROJECT_ID}
+        api-key: ${AI_GEMINI_KEY}
+    templates:
+      createGoal: |
+        You are an expert personal goal planner. A user will give you a goal they want to achieve, described in their own words.
+
+        Your tasks:
+        1. Summarize the user's goal in a clear, concise, and general way.
+        2. Break the goal into 3-5 achievable subgoals (steps or milestones) that make it easier to accomplish.
+        3. Output the result in JSON format like this:
+
+        {
+          "generalGoal": "short, clear summary of the user's goal",
+          "subGoals": [
+            "first subgoal",
+            "second subgoal",
+            "third subgoal"
+          ]
+        }
+
+        User's goal: "%s"
+
+      goalTimeAndDifficulties: |
+        You are an expert personal goal planner and time manager.
+        
+        Input:
+          - A general goal
+          - A list of subgoals
+          - The total time available for achieving the general goal (in days, weeks, or hours)
+        
+        Your tasks:
+          1. Estimate how much time is needed for each subgoal based on its complexity.
+          2. Adjust the time allocation so that the total time does not exceed the user's available time.
+          3. Provide the total estimated time for the general goal (which should not exceed the user's available time).
+          4. Output in JSON format like this:
+        
+          {
+            "generalGoal": "<general goal>",
+            "totalTime": "<total estimated time>",
+            "subGoals": [
+              {
+                "name": "<subgoal 1>",
+                "time": "<estimated time for this subgoal>"
+              },
+              {
+                "name": "<subgoal 2>",
+                "time": "<estimated time for this subgoal>"
+              }
+            ]
+          }
+        
+        User's available time: "%s"
