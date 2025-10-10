@@ -6,7 +6,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiTimeAnd
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.goal.GoalRequestDto;
 import com.github.mykyta.sirobaba.ailearningtracker.service.AIService;
 import lombok.AllArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AIServiceImpl implements AIService {
 
-    private final ChatClient chatClient;
+    private final ChatModel chatModel;
 
     @Override
     public AiPlanResponseDto createLearningPlan(GoalRequestDto goalRequestDto) {
