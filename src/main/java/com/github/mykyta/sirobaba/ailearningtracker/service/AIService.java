@@ -1,8 +1,6 @@
 package com.github.mykyta.sirobaba.ailearningtracker.service;
 
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiPlanResponseDto;
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiTimeAndDifficultAnalysisRequestDto;
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiTimeAndDifficultAnalysisResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.goal.GoalRequestDto;
 
 /**
@@ -11,5 +9,5 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.goal.GoalReq
  */
 public interface AIService {
     AiPlanResponseDto createLearningPlan(GoalRequestDto goalRequestDto);
-    AiTimeAndDifficultAnalysisResponseDto analyzePlan(AiTimeAndDifficultAnalysisRequestDto aiAnalysisRequestDto);
+
 }
