@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * Created by Mykyta Sirobaba on 09.10.2025.
  * email mykyta.sirobaba@gmail.com
@@ -12,8 +14,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class GoalRequestDto {
     private String title;
     private String prompt;
-    private Integer availableWeeks;
+    private LocalDate deadline;
+    private Integer hoursPerWeek;
 }
