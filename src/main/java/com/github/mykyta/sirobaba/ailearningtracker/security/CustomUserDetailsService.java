@@ -1,7 +1,6 @@
 package com.github.mykyta.sirobaba.ailearningtracker.security;
 
 import com.github.mykyta.sirobaba.ailearningtracker.constant.ErrorMessage;
-import com.github.mykyta.sirobaba.ailearningtracker.exception.exceptions.UseremailNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.findByEmail(email).orElseThrow(() ->
-                new UseremailNotFoundException(String.format(ErrorMessage.USER_WITH_THIS_EMAIL_NOT_FOUND, email)));
+                new UsernameNotFoundException(String.format(ErrorMessage.USER_WITH_THIS_EMAIL_NOT_FOUND, email)));
         return new CustomUserDetails(user);
     }
 }
