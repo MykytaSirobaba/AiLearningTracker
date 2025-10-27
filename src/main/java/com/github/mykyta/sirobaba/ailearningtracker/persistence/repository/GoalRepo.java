@@ -1,6 +1,6 @@
 package com.github.mykyta.sirobaba.ailearningtracker.persistence.repository;
 
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.AIAnalysis;
+import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Goal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface GoalRepo extends JpaRepository<AIAnalysis, Long> {
+public interface GoalRepo extends JpaRepository<Goal, Long> {
 }
