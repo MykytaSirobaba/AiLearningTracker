@@ -44,8 +44,8 @@ public class AccessTokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String token = authHeader.substring("Bearer ".length());
-        final String email = jwtTool.extractEmail(token);
+        String token = authHeader.substring("Bearer ".length());
+        String email = jwtTool.extractEmail(token);
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {

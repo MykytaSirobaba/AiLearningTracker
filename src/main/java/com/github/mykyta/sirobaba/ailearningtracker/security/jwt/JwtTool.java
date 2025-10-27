@@ -53,13 +53,13 @@ public class JwtTool {
     }
 
     public boolean validateToken(String token, UserDetails user) {
-        final String email = extractEmail(token);
+        String email = extractEmail(token);
         return email.equals(user.getUsername()) && isValid(token);
     }
 
     public boolean validateRefreshToken(String token, User user) {
-        final String email = extractEmail(token);
-        final String refreshKey = extractClaim(token, "refreshKey", String.class);
+        String email = extractEmail(token);
+        String refreshKey = extractClaim(token, "refreshKey", String.class);
         return email.equals(user.getEmail())
                && refreshKey.equals(user.getRefreshTokenKey())
                && !isValid(token);
@@ -71,7 +71,7 @@ public class JwtTool {
     }
 
     public boolean isValid(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
+        return extractAllClaims(token).getExpiration().after(new Date());
 
     }
 

@@ -1,5 +1,9 @@
 package com.github.mykyta.sirobaba.ailearningtracker.service.impl;
 
+import com.github.mykyta.sirobaba.ailearningtracker.constant.ErrorMessage;
+import com.github.mykyta.sirobaba.ailearningtracker.exception.exceptions.UserIsAlreadyRegistered;
+import com.github.mykyta.sirobaba.ailearningtracker.exception.exceptions.UserNotFoundException;
+import com.github.mykyta.sirobaba.ailearningtracker.exception.exceptions.UseremailNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth.LoginRequestDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth.RegisterRequestDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth.TokenResponseDto;
@@ -9,7 +13,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.UserMappe
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.UserRepo;
 import com.github.mykyta.sirobaba.ailearningtracker.security.jwt.JwtTool;
 import com.github.mykyta.sirobaba.ailearningtracker.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +26,7 @@ import java.util.UUID;
  * email mykyta.sirobaba@gmail.com
  */
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepo userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -33,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponseDto register(RegisterRequestDto request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new UserIsAlreadyRegistered(ErrorMessage.EMAIL_ALREADY_REGISTERED);
         }
 
         User user = User.builder()
@@ -57,7 +61,8 @@ public class AuthServiceImpl implements AuthService {
         );
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException
+                        (String.format(ErrorMessage.USER_WITH_THIS_EMAIL_NOT_FOUND, request.getEmail())));
 
         return buildTokenResponse(user);
     }
