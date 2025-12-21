@@ -1,5 +1,7 @@
 package com.github.mykyta.sirobaba.ailearningtracker.security.jwt;
 
+import com.github.mykyta.sirobaba.ailearningtracker.constants.ErrorMessage;
+import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.Invalid2FaTokenException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,13 +24,16 @@ public class JwtTool {
     private final String jwtSecret;
     private final Long jwtExpiration;
     private final Long refreshExpiration;
+    private final Long jwt2FaToken;
 
     public JwtTool(@Value("${tokenKey}") String jwtSecret,
                    @Value("${accessTokenValidTimeInMillisecond}") Long jwtExpiration,
-                   @Value("${refreshTokenValidTimeInMillisecond}") Long refreshExpiration) {
+                   @Value("${refreshTokenValidTimeInMillisecond}") Long refreshExpiration,
+                   @Value("${jwt2FaToken}")Long jwt2FaToken) {
         this.jwtSecret = jwtSecret;
         this.jwtExpiration = jwtExpiration;
         this.refreshExpiration = refreshExpiration;
+        this.jwt2FaToken = jwt2FaToken;
     }
 
     public String generateAccessToken(User user) {
@@ -65,6 +70,32 @@ public class JwtTool {
                && !isValid(token);
     }
 
+    public String generate2FaToken(User user) {
+        Date expiration = new Date(System.currentTimeMillis() + jwt2FaToken);
+
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .claim("userId", user.getId())
+                .claim("authStage", "2fa_pending")
+                .setIssuedAt(new Date())
+                .setExpiration(expiration)
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public Long getUserIdFrom2FaToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        if (!"2fa_pending".equals(claims.get("authStage"))) {
+            throw new Invalid2FaTokenException(ErrorMessage.INVALID_TOKEN_TYPE);
+        }
+
+        return claims.get("userId", Long.class);
+    }
 
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
