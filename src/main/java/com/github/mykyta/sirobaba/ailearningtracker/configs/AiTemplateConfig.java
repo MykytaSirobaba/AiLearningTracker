@@ -1,4 +1,4 @@
-package com.github.mykyta.sirobaba.ailearningtracker.config;
+package com.github.mykyta.sirobaba.ailearningtracker.configs;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
