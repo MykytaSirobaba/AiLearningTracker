@@ -1,6 +1,7 @@
 package com.github.mykyta.sirobaba.ailearningtracker.security.oauth2;
 
-import com.github.mykyta.sirobaba.ailearningtracker.exception.exceptions.UserNotFoundException;
+import com.github.mykyta.sirobaba.ailearningtracker.constants.ErrorMessage;
+import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.UserNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.UserRepo;
 import com.github.mykyta.sirobaba.ailearningtracker.security.jwt.JwtTool;
@@ -36,12 +37,19 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         final String email = oAuth2User.getAttribute("email");
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found after OAuth2 login"));
+                .orElseThrow(() -> new UserNotFoundException(ErrorMessage.USER_NOT_FOUND_AFTER_OAUT2));
+
+        if (user.isTwoFactorEnabled()) {
+            String twoFactorToken = jwtTool.generate2FaToken(user);
+            String redirectUrl = "http://your-frontend.com/2fa-required?token=" + twoFactorToken;
+            response.sendRedirect(redirectUrl);
+            return;
+        }
         String jwt = jwtTool.generateAccessToken(user);
 
         Cookie jwtCookie = new Cookie("jwt", jwt);
