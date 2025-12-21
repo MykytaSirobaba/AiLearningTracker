@@ -1,4 +1,4 @@
-package com.github.mykyta.sirobaba.ailearningtracker.constant;
+package com.github.mykyta.sirobaba.ailearningtracker.constants;
 
 import lombok.experimental.UtilityClass;
 
@@ -11,4 +11,5 @@ import lombok.experimental.UtilityClass;
 public final class TemplateNames {
     public static final String CREATE_SUBGOAL = "createSubgoal";
     public static final String CREATE_MAIN_GOAL = "createMainGoal";
+    public static final String CREATE_ANALYSE_PROGRESS_LOGS = "createAnalysisProgressLogs";
 }

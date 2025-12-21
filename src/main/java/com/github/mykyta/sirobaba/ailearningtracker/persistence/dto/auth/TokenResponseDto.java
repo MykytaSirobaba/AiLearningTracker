@@ -1,6 +1,6 @@
 package com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth;
 
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.UserResponseDto;
+import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.UserResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +16,6 @@ public class TokenResponseDto {
     String accessToken;
     String refreshToken;
     String tokenType;
-    private long expiresIn;
+    private Long expiresIn;
     private UserResponseDto user;
 }
