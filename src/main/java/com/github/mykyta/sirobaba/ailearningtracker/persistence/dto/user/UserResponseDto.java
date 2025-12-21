@@ -1,9 +1,8 @@
-package com.github.mykyta.sirobaba.ailearningtracker.persistence.dto;
+package com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Created by Mykyta Sirobaba on 07.10.2025.
