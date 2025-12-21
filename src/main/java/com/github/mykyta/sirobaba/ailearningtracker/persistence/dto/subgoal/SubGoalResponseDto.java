@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubGoalResponseDto {
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private Difficulty difficulty;
     private Integer estimatedHours;
-    private Boolean completed;
+    private boolean completed;
 }
