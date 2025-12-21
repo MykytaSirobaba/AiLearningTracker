@@ -4,6 +4,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.enums.Rol
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import java.util.List;
  * Created by Mykyta Sirobaba on 15.08.2025.
  * email mykyta.sirobaba@gmail.com
  */
-
 @Entity
 @Table(name = "users")
 @Data
@@ -41,6 +41,9 @@ public class User {
 
     @Column(name = "two_factor_secret")
     private String twoFactorSecret;
+
+    @Column(name = "two_factor_secret_created_at")
+    private Instant twoFactorSecretCreatedAt;
 
     @Column(name = "provider")
     private String provider;

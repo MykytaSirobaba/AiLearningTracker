@@ -25,10 +25,12 @@ public class AIAnalysis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Lob
     @Column(name = "analysis_text", columnDefinition = "TEXT", nullable = false)
     private String analysisText;
 

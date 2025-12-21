@@ -2,10 +2,7 @@ package com.github.mykyta.sirobaba.ailearningtracker.persistence.entity;
 
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.enums.Difficulty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Created by Mykyta Sirobaba on 15.08.2025.
@@ -18,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "goal")
 public class Subgoal {
 
     @Id

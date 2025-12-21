@@ -25,6 +25,9 @@ public class ProgressLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "log_time", nullable = false)
     private LocalDateTime logTime;
 
