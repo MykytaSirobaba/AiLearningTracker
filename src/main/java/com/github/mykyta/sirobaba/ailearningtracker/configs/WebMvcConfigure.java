@@ -1,17 +1,25 @@
-package com.github.mykyta.sirobaba.ailearningtracker.config;
+package com.github.mykyta.sirobaba.ailearningtracker.configs;
 
+import com.github.mykyta.sirobaba.ailearningtracker.resolvers.UserArgumentResolver;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * Created by Mykyta Sirobaba on 09.10.2025.
  * email mykyta.sirobaba@gmail.com
  */
 @Configuration
-public class WebMvcConfigure {
+@AllArgsConstructor
+public class WebMvcConfigure implements WebMvcConfigurer {
+    private final UserArgumentResolver userArgumentResolver;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -23,5 +31,10 @@ public class WebMvcConfigure {
                         .allowCredentials(true);
             }
         };
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(userArgumentResolver);
     }
 }
