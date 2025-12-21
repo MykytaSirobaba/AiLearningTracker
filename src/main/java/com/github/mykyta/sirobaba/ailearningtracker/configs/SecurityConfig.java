@@ -1,4 +1,4 @@
-package com.github.mykyta.sirobaba.ailearningtracker.config;
+package com.github.mykyta.sirobaba.ailearningtracker.configs;
 
 import com.github.mykyta.sirobaba.ailearningtracker.security.CustomUserDetailsService;
 import com.github.mykyta.sirobaba.ailearningtracker.security.filters.AccessTokenAuthenticationFilter;
@@ -36,7 +36,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/v3/api-docs/**",
+                                "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
