@@ -1,7 +1,8 @@
-spring:
-  profiles:
-    active: dev
+app:
+  security:
+    two-factor-setup-ttl-minutes: 5
 
+spring:
   security:
     oauth2:
       client:
@@ -67,3 +68,39 @@ spring:
         USER INPUT:
         GeneralGoal: {{generalGoal}}
         Difficulty: {{difficulty}}
+
+      createAnalysisProgressLogs: |
+        You are an analytical AI designed to evaluate progress data.
+
+        TASK:
+        1. Analyze the provided progress logs in relation to the main goal and its subgoals.
+        2. Specifically analyze the provided ProgressLogs to extract detailed, factual, and chronological evidence of actions, outcomes, and issues.
+        3. Determine the current status of each (e.g., On Track, At Risk, Delayed).
+        4. Identify achievements, issues, or blockers.
+        5. Provide clear, actionable next steps and long-term recommendations.
+
+        OUTPUT INSTRUCTIONS:
+        - Return **JSON only** (no markdown, no extra text, no explanation).
+        - Do **not** ask for clarification or provide a conversational response.
+        - The output must match exactly this JSON schema:
+
+        {
+        "title": "Log analysis",
+        "analysisText": "
+          A. Summary Progress Analysis:
+          - Overall Status: [Short overall evaluation]
+          - Key Achievements: [List or summarize main successes]
+          - Problems/Blockers: [Summarize recurring issues or obstacles]
+          - Subgoal Progress: [Brief status for each subgoal]
+
+          B. Recommended Next Steps:
+          1. Priority #1: [Immediate critical action]
+          2. Priority #2: [Next important action]
+          3. Long-Term Recommendation: [Strategic improvement or focus area]
+        "
+        }
+
+        USER INPUT:
+        - GeneralGoalDescription: {{goalDescription}}
+        - SubGoals: {{subgoals}}
+        - ProgressLogs: {{progressLogContent}}
