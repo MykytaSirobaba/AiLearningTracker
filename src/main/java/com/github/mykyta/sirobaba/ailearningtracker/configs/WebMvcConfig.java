@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Configuration
 @AllArgsConstructor
-public class WebMvcConfigure implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
     private final UserArgumentResolver userArgumentResolver;
 
     @Bean
@@ -26,7 +26,7 @@ public class WebMvcConfigure implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080")
+                        .allowedOrigins("http://localhost:8080", "http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true);
             }
