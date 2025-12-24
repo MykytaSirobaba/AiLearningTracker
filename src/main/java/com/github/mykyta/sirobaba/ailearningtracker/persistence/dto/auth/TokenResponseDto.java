@@ -13,9 +13,9 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class TokenResponseDto {
-    String accessToken;
-    String refreshToken;
-    String tokenType;
+    private String accessToken;
+    private String refreshToken;
+    private String tokenType;
     private Long expiresIn;
     private UserResponseDto user;
 }
