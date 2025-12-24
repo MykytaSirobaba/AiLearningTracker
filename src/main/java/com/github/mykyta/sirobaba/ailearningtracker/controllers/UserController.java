@@ -4,7 +4,6 @@ import com.github.mykyta.sirobaba.ailearningtracker.annotations.CurrentUser;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.CurrentUserInfoDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.TwoFactorActivationRequestDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.TwoFactorSetupResponseDto;
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @GetMapping("/me")
+    public ResponseEntity<CurrentUserInfoDto> getCurrentUser(@CurrentUser CurrentUserInfoDto currentUser) {
+        return ResponseEntity.ok(currentUser);
+    }
 
     @GetMapping("/2fa/setup")
     public ResponseEntity<TwoFactorSetupResponseDto> setupTwoFactor(@CurrentUser CurrentUserInfoDto currentUser) {
