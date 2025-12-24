@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
 
         user.setTwoFactorEnabled(false);
         user.setTwoFactorSecret(null);
+        user.setTwoFactorSecretCreatedAt(null);
         userRepo.save(user);
     }
 
