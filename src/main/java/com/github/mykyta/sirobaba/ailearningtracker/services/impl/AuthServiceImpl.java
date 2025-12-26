@@ -1,13 +1,13 @@
 package com.github.mykyta.sirobaba.ailearningtracker.services.impl;
 
 import com.github.mykyta.sirobaba.ailearningtracker.constants.ErrorMessage;
+import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.InvalidRefreshTokenException;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.UserHasAlreadyRegistered;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.UserNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth.*;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.enums.Role;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.UserMapper;
-import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.UserRepo;
 import com.github.mykyta.sirobaba.ailearningtracker.security.jwt.JwtTool;
 import com.github.mykyta.sirobaba.ailearningtracker.security.totp.TotpService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.AuthService;
@@ -32,7 +32,7 @@ import java.util.UUID;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepo userRepository;
+    private final UserServiceImpl userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTool jwtTool;
     private final AuthenticationManager authenticationManager;
@@ -50,16 +50,6 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponseDto register(RegisterRequestDto request) {
         log.info("Registering new user: email={}, username={}", request.getEmail(), request.getUsername());
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            log.warn("Registration failed: email already registered: {}", request.getEmail());
-            throw new UserHasAlreadyRegistered(ErrorMessage.EMAIL_ALREADY_REGISTERED);
-        }
-
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            log.warn("Registration failed: username already registered: {}", request.getUsername());
-            throw new UserHasAlreadyRegistered(ErrorMessage.USER_ALREADY_REGISTERED_WITH_THIS_NAME);
-        }
-
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -69,10 +59,11 @@ public class AuthServiceImpl implements AuthService {
                 .refreshTokenKey(UUID.randomUUID().toString())
                 .build();
 
-        userRepository.save(user);
-        log.info("User registered successfully: id={}, email={}", user.getId(), user.getEmail());
+        User savedUser = userService.createUser(user);
 
-        return buildTokenResponse(user);
+        log.info("User registered successfully: id={}, email={}", savedUser.getId(), savedUser.getEmail());
+
+        return buildTokenResponse(savedUser);
     }
 
     /**
@@ -90,14 +81,7 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> {
-                    log.warn("Login failed: user not found with email={}", request.getEmail());
-                    return new UserNotFoundException(String.format(
-                            ErrorMessage.USER_WITH_THIS_EMAIL_NOT_FOUND,
-                            request.getEmail()
-                    ));
-                });
+        User user = userService.findByEmail(request.getEmail());
 
         if (user.isTwoFactorEnabled()) {
             log.info("2FA enabled for user id={}, requiring second step.", user.getId());
@@ -123,8 +107,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponseDto completeTwoFactorLogin(TwoFactorVerificationRequestDto request) {
         Long userId = jwtTool.getUserIdFrom2FaToken(request.getTwoFactorToken());
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(ErrorMessage.USER_NOT_FOUND_FROM_2FA_TOKEN));
+        User user = userService.findById(userId);
 
         boolean isCodeValid = totpService.validateCode(
                 user.getTwoFactorSecret(),
@@ -148,8 +131,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenResponseDto buildTokenResponse(User user) {
         log.debug("Generating JWT tokens for user id={}", user.getId());
 
-        String accessToken = jwtTool.generateAccessToken(user);
-        String refreshToken = jwtTool.generateRefreshToken(user);
+        final String accessToken = jwtTool.generateAccessToken(user);
+        final String refreshToken = jwtTool.generateRefreshToken(user);
 
         TokenResponseDto response = TokenResponseDto.builder()
                 .accessToken(accessToken)
@@ -161,5 +144,20 @@ public class AuthServiceImpl implements AuthService {
 
         log.debug("Token response built successfully for user id={}", user.getId());
         return response;
+    }
+
+    @Override
+    public RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
+        final String refreshToken = refreshTokenRequestDto.getRefreshToken();
+        final User user = userService.findByEmail(jwtTool.extractEmail(refreshToken));
+        if (jwtTool.validateRefreshToken(refreshToken, user)) {
+            return RefreshTokenResponseDto.builder()
+                    .accessToken(jwtTool.generateAccessToken(user))
+                    .refreshToken(refreshToken)
+                    .tokenType("Bearer")
+                    .expiresIn(jwtTool.getExpirationDate(refreshToken))
+                    .build();
+        }
+        throw new InvalidRefreshTokenException(String.format(ErrorMessage.INVALID_REFRESH_TOKEN, refreshToken));
     }
 }

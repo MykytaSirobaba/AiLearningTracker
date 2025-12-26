@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.io.IOException;
  * email mykyta.sirobaba@gmail.com
  */
 
+@Slf4j
 @Tag(name = "Authentication", description = "Endpoints for user authentication and registration")
 @RestController
 @RequestMapping("/auth")
@@ -96,5 +99,8 @@ public class AuthController {
         response.sendRedirect("/oauth2/authorization/google");
     }
 
-
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponseDto> refreshToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+    return ResponseEntity.ok(authService.refresh(refreshTokenRequestDto));
+    }
 }

@@ -25,5 +25,7 @@ public interface AuthService {
     LoginResultDto login(LoginRequestDto request);
 
     TokenResponseDto completeTwoFactorLogin(TwoFactorVerificationRequestDto request);
+
+    RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto);
 }
 
