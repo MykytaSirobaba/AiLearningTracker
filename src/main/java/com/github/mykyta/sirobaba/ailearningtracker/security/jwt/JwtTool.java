@@ -67,7 +67,7 @@ public class JwtTool {
         String refreshKey = extractClaim(token, "refreshKey", String.class);
         return email.equals(user.getEmail())
                && refreshKey.equals(user.getRefreshTokenKey())
-               && !isValid(token);
+               && isValid(token);
     }
 
     public String generate2FaToken(User user) {
