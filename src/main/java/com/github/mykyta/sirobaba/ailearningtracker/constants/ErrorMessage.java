@@ -38,4 +38,5 @@ public final class ErrorMessage {
     public static final String TWO_FACTOR_NOT_ENABLED = "Two factor is not enabled";
     public static final String USER_WITH_THIS_USERNAME_NOT_FOUND = "User with the username %s not found";
     public static final String INVALID_REFRESH_TOKEN = "Invalid refresh token: %s";
+    public static final String AI_RETURNED_EMPTY_RESPONSE = "AI returned empty response: %s";
 }
