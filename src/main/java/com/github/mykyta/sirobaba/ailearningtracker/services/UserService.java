@@ -30,6 +30,8 @@ public interface UserService {
      */
     User findById(Long id);
 
+    User createUser(User user);
+
     /**
      * Method for retrieving current user information DTO.
      *

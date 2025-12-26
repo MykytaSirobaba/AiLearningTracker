@@ -13,6 +13,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -23,6 +24,7 @@ import java.time.Instant;
 @Service
 @Slf4j
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
@@ -65,6 +67,22 @@ public class UserServiceImpl implements UserService {
                             String.format(ErrorMessage.USER_WITH_THIS_ID_NOT_FOUND, id)
                     );
                 });
+    }
+
+    @Override
+    @Transactional
+    public User createUser(User user) {
+        if (userRepo.existsByEmail(user.getEmail())) {
+            log.warn("Registration failed: email already registered: {}", user.getEmail());
+            throw new UserHasAlreadyRegistered(ErrorMessage.EMAIL_ALREADY_REGISTERED);
+        }
+
+        if (userRepo.existsByUsername(user.getUsername())) {
+            log.warn("Registration failed: username already registered: {}", user.getUsername());
+            throw new UserHasAlreadyRegistered(ErrorMessage.USER_ALREADY_REGISTERED_WITH_THIS_NAME);
+        }
+
+        return userRepo.save(user);
     }
 
     @Override
