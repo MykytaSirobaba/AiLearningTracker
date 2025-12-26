@@ -14,10 +14,10 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.goal.GoalReq
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.progresslog.ProgressLogContentDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Subgoal;
 import com.github.mykyta.sirobaba.ailearningtracker.services.AIService;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,12 +32,12 @@ import java.util.List;
  * Provides functionality to create main goals, subgoals, validate deadlines,
  * and parse AI responses into DTOs.
  */
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class AIServiceImpl implements AIService {
 
-    private final ChatModel chatModel;
+    private final ChatClient chatClient;
     private final AiTemplateConfig aiTemplateConfig;
     private final ObjectMapper objectMapper;
 
@@ -46,7 +46,7 @@ public class AIServiceImpl implements AIService {
      *
      * @param goalRequestDto user-provided goal request
      * @return AI-generated learning plan response
-     * @throws AiJsonParseException if AI returns invalid JSON
+     * @throws AiJsonParseException    if AI returns invalid JSON
      * @throws GoalValidationException if the user's deadline is unrealistic
      */
     @Override
@@ -82,7 +82,18 @@ public class AIServiceImpl implements AIService {
         String goal = goalRequestDto.getPrompt() != null ? goalRequestDto.getPrompt() : "";
 
         String promptText = template.replace("{{goal}}", goal);
-        String aiResponse = chatModel.call(promptText);
+
+        String aiResponse = chatClient
+                .prompt(promptText)
+                .call()
+                .content();
+
+        if (aiResponse == null || aiResponse.isBlank()) {
+            throw new AiJsonParseException(
+                    String.format(ErrorMessage.AI_RETURNED_EMPTY_RESPONSE, promptText)
+            );
+        }
+
         String jsonString = getString(aiResponse);
 
         try {
@@ -111,7 +122,17 @@ public class AIServiceImpl implements AIService {
                 .replace("{{generalGoal}}", goalAiResultDto.getGeneralGoal())
                 .replace("{{difficulty}}", goalAiResultDto.getDifficulty().toString());
 
-        String aiResponse = chatModel.call(promptText);
+        String aiResponse = chatClient
+                .prompt(promptText)
+                .call()
+                .content();
+
+        if (aiResponse == null || aiResponse.isBlank()) {
+            throw new AiJsonParseException(
+                    String.format(ErrorMessage.AI_RETURNED_EMPTY_RESPONSE, promptText)
+            );
+        }
+
         String jsonString = getString(aiResponse);
 
         try {
@@ -127,9 +148,9 @@ public class AIServiceImpl implements AIService {
     /**
      * Validates whether the user's deadline is feasible given estimated hours for subgoals.
      *
-     * @param goalAiResultDto AI-generated main goal
+     * @param goalAiResultDto   AI-generated main goal
      * @param subgoalListResult list of subgoals
-     * @param goalRequestDto original user request
+     * @param goalRequestDto    original user request
      * @throws GoalValidationException if the deadline is insufficient
      */
     private void validateDeadline(GoalAiResultDto goalAiResultDto,
@@ -176,8 +197,8 @@ public class AIServiceImpl implements AIService {
      * Analyzes a list of progress logs using the AI model.
      *
      * @param progressLogContentDtos progress logs to analyze
-     * @param description goal description
-     * @param subgoals list of subgoals
+     * @param description            goal description
+     * @param subgoals               list of subgoals
      * @return AI-generated analysis DTO
      * @throws AiJsonParseException if AI returns invalid JSON
      */
@@ -194,7 +215,17 @@ public class AIServiceImpl implements AIService {
                 .replace("{{subgoals}}", subgoals.toString())
                 .replace("{{progressLogContent}}", progressLogContentDtos.toString());
 
-        String aiResponse = chatModel.call(promptText);
+        String aiResponse = chatClient
+                .prompt(promptText)
+                .call()
+                .content();
+
+        if (aiResponse == null || aiResponse.isBlank()) {
+            throw new AiJsonParseException(
+                    String.format(ErrorMessage.AI_RETURNED_EMPTY_RESPONSE, promptText)
+            );
+        }
+
         String jsonString = getString(aiResponse);
 
         try {
