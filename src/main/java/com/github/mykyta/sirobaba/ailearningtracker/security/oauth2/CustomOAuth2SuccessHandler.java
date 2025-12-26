@@ -4,32 +4,37 @@ import com.github.mykyta.sirobaba.ailearningtracker.constants.ErrorMessage;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.UserNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.UserRepo;
+import com.github.mykyta.sirobaba.ailearningtracker.properties.FrontendProperties;
 import com.github.mykyta.sirobaba.ailearningtracker.security.jwt.JwtTool;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Mykyta Sirobaba on 07.10.2025.
  * email mykyta.sirobaba@gmail.com
  */
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepo userRepo;
     private final JwtTool jwtTool;
-    private static final Integer COOKIES_EXPIRE = 3600;
+    private final FrontendProperties frontendProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
@@ -46,21 +51,25 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         if (user.isTwoFactorEnabled()) {
             String twoFactorToken = jwtTool.generate2FaToken(user);
-            String redirectUrl = "http://your-frontend.com/2fa-required?token=" + twoFactorToken;
+            String redirectUrl = UriComponentsBuilder.fromUriString(frontendProperties.getTwoFaPageUrl())
+                    .queryParam("tempToken", twoFactorToken)
+                    .build().toUriString();
             response.sendRedirect(redirectUrl);
             return;
         }
-        String jwt = jwtTool.generateAccessToken(user);
 
-        Cookie jwtCookie = new Cookie("jwt", jwt);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(false);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(COOKIES_EXPIRE);
-        jwtCookie.setAttribute("SameSite", "none");
+        String accessToken = jwtTool.generateAccessToken(user);
+        String refreshToken = jwtTool.generateRefreshToken(user);
+        log.info("Access token: " + accessToken);
+        log.info("Refresh token: " + refreshToken);
 
-        response.addCookie(jwtCookie);
+        String redirectUrl = UriComponentsBuilder.fromUriString(frontendProperties.getFrontendUrl())
+                .queryParam("accessToken", accessToken)
+                .queryParam("refreshToken", refreshToken)
+                .queryParam("username", URLEncoder.encode(user.getUsername(), StandardCharsets.UTF_8))
+                .build().toUriString();
 
-        response.sendRedirect("http://localhost:8080/home");
+        log.info("Redirect URL: " + redirectUrl);
+        response.sendRedirect(redirectUrl);
     }
 }
