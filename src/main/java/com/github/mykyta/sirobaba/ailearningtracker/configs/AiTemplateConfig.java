@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "spring.ai")
+@ConfigurationProperties(prefix = "app.ai")
 @EnableConfigurationProperties(AiTemplateConfig.class)
 public class AiTemplateConfig {
     private Map<String, String> templates;

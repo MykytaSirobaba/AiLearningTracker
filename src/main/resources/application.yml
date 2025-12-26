@@ -1,25 +1,7 @@
 app:
   security:
     two-factor-setup-ttl-minutes: 5
-
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            authorization-grant-type: authorization_code
-            scope: profile, email
-
   ai:
-    model:
-      chat: google-genai
-    google:
-      genai:
-        project-id: ${PROJECT_ID}
-        api-key: ${AI_GEMINI_KEY}
     templates:
       createMainGoal: |
         You are an expert personal goal planner.
@@ -27,10 +9,10 @@ spring:
 
         Task: Summarize the user's goal in a concise and clear way as "generalGoal".
         Also assign an overall "difficulty" level: EASY, MEDIUM, or HARD based on the complexity.
-        
+
         Return JSON only. DO NOT ask for clarification, DO NOT respond conversationally. Just output the JSON format like string WITHOUT
         json or ``` in the end or start.
-        
+
         {
         "generalGoal": "string",
         "difficulty": "EASY|MEDIUM|HARD"
@@ -38,7 +20,7 @@ spring:
 
         USER INPUT:
         Goal: {{goal}}
-      
+
       createSubgoal: |
         You are an expert personal goal planner.
         The user has a general goal and its difficulty level.
@@ -53,7 +35,7 @@ spring:
 
         Return JSON only. DO NOT ask for clarification, DO NOT respond conversationally. Just output the JSON format like string WITHOUT
         json or ``` in the end or start.
-        
+
         {
           "subGoals": [
             {
@@ -104,3 +86,22 @@ spring:
         - GeneralGoalDescription: {{goalDescription}}
         - SubGoals: {{subgoals}}
         - ProgressLogs: {{progressLogContent}}
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: profile, email
+
+  ai:
+    model:
+      chat: google-genai
+    google:
+      genai:
+        project-id: ${PROJECT_ID}
+        api-key: ${AI_GEMINI_KEY}
