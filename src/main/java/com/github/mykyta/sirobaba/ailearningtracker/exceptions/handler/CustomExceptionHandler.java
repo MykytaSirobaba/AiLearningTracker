@@ -113,6 +113,15 @@ public class CustomExceptionHandler {
         return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.UNEXPECTED_SERVER_ERROR, request);
     }
 
+    @ExceptionHandler({
+            InvalidRefreshTokenException.class,
+            Invalid2FaTokenException.class
+    })
+    public ResponseEntity<ExceptionResponse> handleInvalidToken(RuntimeException ex, WebRequest request) {
+        log.debug("Invalid token: {}", ex.getMessage());
+        return createErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
+    }
+
     /**
      * Builds a standardized {@link ExceptionResponse} for API error output.
      *

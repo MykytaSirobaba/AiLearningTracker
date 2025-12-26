@@ -2,8 +2,6 @@ package com.github.mykyta.sirobaba.ailearningtracker.constants;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.Locale;
-
 /**
  * Created by Mykyta Sirobaba on 16.08.2025.
  * email mykyta.sirobaba@gmail.com
@@ -38,4 +36,6 @@ public final class ErrorMessage {
     public static final String TWO_FACTOR_ALREADY_ENABLED = "Two factor already enabled";
     public static final String TIME_FOR_ACTIVATION_EXPIRED = "Activation time has expired";
     public static final String TWO_FACTOR_NOT_ENABLED = "Two factor is not enabled";
+    public static final String USER_WITH_THIS_USERNAME_NOT_FOUND = "User with the username %s not found";
+    public static final String INVALID_REFRESH_TOKEN = "Invalid refresh token: %s";
 }
