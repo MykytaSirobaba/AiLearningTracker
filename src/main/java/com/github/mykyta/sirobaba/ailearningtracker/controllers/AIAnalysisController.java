@@ -53,8 +53,8 @@ public class AIAnalysisController {
     )
     @PostMapping("/{goalId}/analysis")
     public ResponseEntity<AIAnalysisDetailsDto> createAIAnalysis(@CurrentUser CurrentUserInfoDto userInfoDto,
-                                                                  @RequestBody AIAnalysisRequestDto aiAnalysisRequestDto,
-                                                                  @PathVariable("goalId") Long goalId) {
+                                                                 @RequestBody AIAnalysisRequestDto aiAnalysisRequestDto,
+                                                                 @PathVariable("goalId") Long goalId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(aiAnalysisService.createAIAnalysis(userInfoDto.getId(), aiAnalysisRequestDto, goalId));
     }
