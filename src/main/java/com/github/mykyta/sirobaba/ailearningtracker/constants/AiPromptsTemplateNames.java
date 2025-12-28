@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
  */
 
 @UtilityClass
-public final class TemplateNames {
+public final class AiPromptsTemplateNames {
     public static final String CREATE_SUBGOAL = "createSubgoal";
     public static final String CREATE_MAIN_GOAL = "createMainGoal";
     public static final String CREATE_ANALYSE_PROGRESS_LOGS = "createAnalysisProgressLogs";

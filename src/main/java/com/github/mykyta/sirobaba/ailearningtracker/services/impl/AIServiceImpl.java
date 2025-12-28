@@ -3,7 +3,7 @@ package com.github.mykyta.sirobaba.ailearningtracker.services.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.configs.AiTemplateConfig;
 import com.github.mykyta.sirobaba.ailearningtracker.constants.ErrorMessage;
-import com.github.mykyta.sirobaba.ailearningtracker.constants.TemplateNames;
+import com.github.mykyta.sirobaba.ailearningtracker.constants.AiPromptsTemplateNames;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.AiJsonParseException;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.GoalValidationException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiAnalysisOfProgressLogDto;
@@ -78,7 +78,7 @@ public class AIServiceImpl implements AIService {
      */
     private GoalAiResultDto createMainGoal(GoalRequestDto goalRequestDto) {
         log.debug("Generating main goal for user input: {}", goalRequestDto.getPrompt());
-        String template = aiTemplateConfig.getTemplate(TemplateNames.CREATE_MAIN_GOAL);
+        String template = aiTemplateConfig.getTemplate(AiPromptsTemplateNames.CREATE_MAIN_GOAL);
         String goal = goalRequestDto.getPrompt() != null ? goalRequestDto.getPrompt() : "";
 
         String promptText = template.replace("{{goal}}", goal);
@@ -116,7 +116,7 @@ public class AIServiceImpl implements AIService {
      */
     private SubgoalListAiResultDto createSubgoal(GoalAiResultDto goalAiResultDto) {
         log.debug("Generating subgoals for main goal: {}", goalAiResultDto.getGeneralGoal());
-        String template = aiTemplateConfig.getTemplate(TemplateNames.CREATE_SUBGOAL);
+        String template = aiTemplateConfig.getTemplate(AiPromptsTemplateNames.CREATE_SUBGOAL);
 
         String promptText = template
                 .replace("{{generalGoal}}", goalAiResultDto.getGeneralGoal())
@@ -208,7 +208,7 @@ public class AIServiceImpl implements AIService {
                                                          List<Subgoal> subgoals) {
         log.info("Analyzing progress logs for goal: {}", description);
 
-        String template = aiTemplateConfig.getTemplate(TemplateNames.CREATE_ANALYSE_PROGRESS_LOGS);
+        String template = aiTemplateConfig.getTemplate(AiPromptsTemplateNames.CREATE_ANALYSE_PROGRESS_LOGS);
 
         String promptText = template
                 .replace("{{goalDescription}}", description)
