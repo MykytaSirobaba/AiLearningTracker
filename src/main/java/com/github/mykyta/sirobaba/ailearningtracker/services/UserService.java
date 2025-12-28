@@ -13,37 +13,63 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 public interface UserService {
 
     /**
-     * Method for finding a user by email.
+     * Finds a user by email.
      *
-     * @param email - user email.
-     * @return a user.
-     * @throws UserNotFoundException if user with this email does not exist.
+     * @param email user email
+     * @return found user entity
+     * @throws UserNotFoundException if user with the given email does not exist
      */
     User findByEmail(String email);
 
     /**
-     * Method for finding a user by id.
+     * Finds a user by id.
      *
-     * @param id - user id.
-     * @return a user.
-     * @throws UserNotFoundException if user with this id does not exist.
+     * @param id user id
+     * @return found user entity
+     * @throws UserNotFoundException if user with the given id does not exist
      */
     User findById(Long id);
 
+    /**
+     * Creates and persists a new user.
+     *
+     * @param user user entity to be created
+     * @return created user entity
+     */
     User createUser(User user);
 
     /**
-     * Method for retrieving current user information DTO.
+     * Retrieves current user information as DTO.
      *
-     * @param email - user email.
-     * @return CurrentUserInfoDto with essential user data.
-     * @throws UserNotFoundException if user with this email does not exist.
+     * @param email user email
+     * @return DTO containing current user information
+     * @throws UserNotFoundException if user with the given email does not exist
      */
     CurrentUserInfoDto findCurrentUserInfoDto(String email);
 
+    /**
+     * Initializes two-factor authentication setup for the user.
+     * <p>
+     * Usually generates secret key and QR code for authenticator apps.
+     *
+     * @param userId user id
+     * @return DTO containing 2FA setup data
+     */
     TwoFactorSetupResponseDto setupTwoFactor(Long userId);
 
+    /**
+     * Activates two-factor authentication for the user after verification.
+     *
+     * @param request DTO containing verification code or related data
+     * @param id user id
+     */
     void activateTwoFactor(TwoFactorActivationRequestDto request, Long id);
 
+    /**
+     * Disables two-factor authentication for the user after verification.
+     *
+     * @param request DTO containing verification code or related data
+     * @param id user id
+     */
     void disable2Fa(TwoFactorActivationRequestDto request, Long id);
 }
