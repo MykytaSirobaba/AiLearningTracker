@@ -59,6 +59,24 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(
+            summary = "Verify two-factor authentication code",
+            description = "Completes the login process by verifying the provided two-factor authentication code.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Two-factor authentication verification data",
+                    content = @Content(schema = @Schema(implementation = TwoFactorVerificationRequestDto.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = HttpStatuses.OK,
+                            content = @Content(schema = @Schema(implementation = TokenResponseDto.class))
+                    ),
+                    @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
+                    @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED)
+            }
+    )
     @PostMapping("/2fa/verify")
     public TokenResponseDto verifyTwoFactor(@RequestBody TwoFactorVerificationRequestDto request) {
         return authService.completeTwoFactorLogin(request);
@@ -99,8 +117,26 @@ public class AuthController {
         response.sendRedirect("/oauth2/authorization/google");
     }
 
+    @Operation(
+            summary = "Refresh access token",
+            description = "Generates a new access token using a valid refresh token.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Refresh token data",
+                    content = @Content(schema = @Schema(implementation = RefreshTokenRequestDto.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = HttpStatuses.OK,
+                            content = @Content(schema = @Schema(implementation = RefreshTokenResponseDto.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED),
+                    @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST)
+            }
+    )
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponseDto> refreshToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-    return ResponseEntity.ok(authService.refresh(refreshTokenRequestDto));
+        return ResponseEntity.ok(authService.refresh(refreshTokenRequestDto));
     }
 }
