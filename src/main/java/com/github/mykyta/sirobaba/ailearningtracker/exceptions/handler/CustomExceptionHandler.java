@@ -113,6 +113,17 @@ public class CustomExceptionHandler {
         return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.UNEXPECTED_SERVER_ERROR, request);
     }
 
+    /**
+     * Handles exceptions related to invalid tokens, such as refresh tokens or 2FA tokens.
+     *
+     * <p>This method is invoked when {@link InvalidRefreshTokenException} or
+     * {@link Invalid2FaTokenException} is thrown in the application. It logs the error
+     * and returns a standardized {@link ExceptionResponse} with HTTP status 401 (Unauthorized).</p>
+     *
+     * @param ex the exception that was thrown
+     * @param request the current web request
+     * @return a {@link ResponseEntity} containing the {@link ExceptionResponse} with details of the error
+     */
     @ExceptionHandler({
             InvalidRefreshTokenException.class,
             Invalid2FaTokenException.class
