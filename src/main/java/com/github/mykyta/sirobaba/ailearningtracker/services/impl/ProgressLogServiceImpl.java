@@ -27,7 +27,8 @@ import java.util.List;
 /**
  * Service implementation for managing progress logs for user goals.
  * <p>
- * Provides methods to create, retrieve, delete, and fetch content of progress logs.
+ * Provides functionality to create, retrieve, delete, and fetch progress log content.
+ * Progress logs are always scoped to a specific goal and user.
  */
 @Service
 @Slf4j
@@ -38,13 +39,31 @@ public class ProgressLogServiceImpl implements ProgressLogService {
     private final GoalService goalService;
     private final ProgressLogMapper progressLogMapper;
 
+    /**
+     * Creates a new progress log entry for a specific goal.
+     * <p>
+     * Calculates the total time spent based on hours and minutes,
+     * associates the log with the given goal, and persists it.
+     *
+     * @param goalId      identifier of the goal
+     * @param progressLog DTO containing progress log data
+     * @param userId      identifier of the log owner
+     * @return response DTO representing the created progress log
+     */
     @Override
     @Transactional
-    public ProgressLogResponseDto createProgressLog(Long goalId, ProgressLogRequestDto progressLog, Long userId) {
+    public ProgressLogResponseDto createProgressLog(
+            Long goalId,
+            ProgressLogRequestDto progressLog,
+            Long userId
+    ) {
         log.info("Creating progress log for goalId={} userId={}", goalId, userId);
 
         Goal goal = goalService.findByIdAndUserId(goalId, userId);
-        int time = sumHoursAndMinutesThenConvertToMinutes(progressLog.getHours(), progressLog.getMinutes());
+        int time = sumHoursAndMinutesThenConvertToMinutes(
+                progressLog.getHours(),
+                progressLog.getMinutes()
+        );
 
         ProgressLog progressLogEntity = ProgressLog.builder()
                 .title(progressLog.getTitle())
@@ -55,76 +74,224 @@ public class ProgressLogServiceImpl implements ProgressLogService {
                 .build();
 
         ProgressLog progressLogSaved = progressLogRepo.save(progressLogEntity);
-        log.info("Progress log created: logId={} goalId={} userId={}", progressLogSaved.getId(), goalId, userId);
+        log.info(
+                "Progress log created: logId={} goalId={} userId={}",
+                progressLogSaved.getId(),
+                goalId,
+                userId
+        );
 
-        return progressLogMapper.progressLogToProgressLogResponseDto(progressLogSaved);
+        return progressLogMapper
+                .progressLogToProgressLogResponseDto(progressLogSaved);
     }
 
+    /**
+     * Retrieves a paginated list of progress logs for a specific goal.
+     *
+     * @param pageable pagination and sorting configuration
+     * @param goalId   identifier of the goal
+     * @param userId   identifier of the goal owner
+     * @return paginated response containing progress log summaries
+     */
     @Override
-    public PageResponse<ProgressLogResponseDto> getLogsForGoal(Pageable pageable, Long goalId, Long userId) {
+    public PageResponse<ProgressLogResponseDto> getLogsForGoal(
+            Pageable pageable,
+            Long goalId,
+            Long userId
+    ) {
         log.info("Fetching progress logs for goalId={} userId={}", goalId, userId);
 
-        Page<ProgressLog> page = progressLogRepo.findProgressLogsByGoalIdAndUserId(pageable, goalId, userId);
-        Page<ProgressLogResponseDto> result = page.map(progressLogMapper::progressLogToProgressLogResponseDto);
+        Page<ProgressLog> page =
+                progressLogRepo.findProgressLogsByGoalIdAndUserId(
+                        pageable,
+                        goalId,
+                        userId
+                );
 
-        log.info("Fetched {} progress logs for goalId={} userId={}", result.getTotalElements(), goalId, userId);
+        Page<ProgressLogResponseDto> result =
+                page.map(progressLogMapper::progressLogToProgressLogResponseDto);
+
+        log.info(
+                "Fetched {} progress logs for goalId={} userId={}",
+                result.getTotalElements(),
+                goalId,
+                userId
+        );
+
         return PageResponse.from(result);
     }
 
+    /**
+     * Retrieves detailed information for a specific progress log.
+     *
+     * @param goalId identifier of the goal
+     * @param logId  identifier of the progress log
+     * @param userId identifier of the log owner
+     * @return detailed response DTO for the requested progress log
+     * @throws ProgressLogNotFoundException if the progress log does not exist
+     */
     @Override
-    public ProgressLogDetailsResponseDto getProgressLogDetails(Long goalId, Long logId, Long userId) {
-        log.info("Fetching progress log details for logId={} goalId={} userId={}", logId, goalId, userId);
+    public ProgressLogDetailsResponseDto getProgressLogDetails(
+            Long goalId,
+            Long logId,
+            Long userId
+    ) {
+        log.info(
+                "Fetching progress log details for logId={} goalId={} userId={}",
+                logId,
+                goalId,
+                userId
+        );
 
-        ProgressLog progressLog = findByIdAndGoalIdAndUserId(goalId, logId, userId);
-        return progressLogMapper.progressLogToProgressLogDetailsResponseDto(progressLog);
+        ProgressLog progressLog =
+                findByIdAndGoalIdAndUserId(goalId, logId, userId);
+
+        return progressLogMapper
+                .progressLogToProgressLogDetailsResponseDto(progressLog);
     }
 
+    /**
+     * Deletes a progress log belonging to a specific goal and user.
+     *
+     * @param goalId identifier of the goal
+     * @param logId  identifier of the progress log
+     * @param userId identifier of the log owner
+     * @throws ProgressLogNotFoundException if the progress log does not exist
+     */
     @Override
     @Transactional
     public void deleteProgressLog(Long goalId, Long logId, Long userId) {
-        log.info("Deleting progress log logId={} goalId={} userId={}", logId, goalId, userId);
+        log.info(
+                "Deleting progress log logId={} goalId={} userId={}",
+                logId,
+                goalId,
+                userId
+        );
 
-        ProgressLog progressLog = findByIdAndGoalIdAndUserId(goalId, logId, userId);
+        ProgressLog progressLog =
+                findByIdAndGoalIdAndUserId(goalId, logId, userId);
+
         progressLogRepo.delete(progressLog);
 
-        log.info("Progress log deleted logId={} goalId={} userId={}", logId, goalId, userId);
+        log.info(
+                "Progress log deleted logId={} goalId={} userId={}",
+                logId,
+                goalId,
+                userId
+        );
     }
 
+    /**
+     * Retrieves recent progress log content entries for a specific goal.
+     * <p>
+     * Typically used for analytics, AI context, or summaries.
+     *
+     * @param goalId identifier of the goal
+     * @param userId identifier of the goal owner
+     * @param limit  maximum number of entries to retrieve
+     * @return list of progress log content DTOs
+     * @throws ProgressLogNotFoundException if no progress log content is found
+     */
     @Override
-    public List<ProgressLogContentDto> getProgressLogContent(Long goalId, Long userId, Integer limit) {
-        log.info("Fetching progress log content for goalId={} userId={} limit={}", goalId, userId, limit);
+    public List<ProgressLogContentDto> getProgressLogContent(
+            Long goalId,
+            Long userId,
+            Integer limit
+    ) {
+        log.info(
+                "Fetching progress log content for goalId={} userId={} limit={}",
+                goalId,
+                userId,
+                limit
+        );
 
         Pageable pageable = PageRequest.of(0, limit);
         List<ProgressLogContentDto> progressLogContentDto =
-                progressLogRepo.findContentsByIdAndGoalIdAndUserId(goalId, userId, pageable);
+                progressLogRepo.findContentsByIdAndGoalIdAndUserId(
+                        goalId,
+                        userId,
+                        pageable
+                );
 
         if (progressLogContentDto.isEmpty()) {
-            log.warn("No progress log content found for goalId={} userId={}", goalId, userId);
+            log.warn(
+                    "No progress log content found for goalId={} userId={}",
+                    goalId,
+                    userId
+            );
             throw new ProgressLogNotFoundException(
-                    String.format(ErrorMessage.PROGRESS_LOGS_CONTENT_NOT_FOUND, goalId, userId)
+                    String.format(
+                            ErrorMessage.PROGRESS_LOGS_CONTENT_NOT_FOUND,
+                            goalId,
+                            userId
+                    )
             );
         }
 
-        log.info("Fetched {} progress log content entries for goalId={} userId={}",
-                progressLogContentDto.size(), goalId, userId);
+        log.info(
+                "Fetched {} progress log content entries for goalId={} userId={}",
+                progressLogContentDto.size(),
+                goalId,
+                userId
+        );
+
         return progressLogContentDto;
     }
 
-    private ProgressLog findByIdAndGoalIdAndUserId(Long goalId, Long logId, Long userId) {
-        log.debug("Finding progress log logId={} goalId={} userId={}", logId, goalId, userId);
+    /**
+     * Finds a progress log by its identifier, goal identifier, and user identifier.
+     *
+     * @param goalId identifier of the goal
+     * @param logId  identifier of the progress log
+     * @param userId identifier of the log owner
+     * @return progress log entity
+     * @throws ProgressLogNotFoundException if the progress log does not exist
+     */
+    private ProgressLog findByIdAndGoalIdAndUserId(
+            Long goalId,
+            Long logId,
+            Long userId
+    ) {
+        log.debug(
+                "Finding progress log logId={} goalId={} userId={}",
+                logId,
+                goalId,
+                userId
+        );
 
-        return progressLogRepo.findByIdAndGoalIdAndUserId(goalId, logId, userId)
+        return progressLogRepo
+                .findByIdAndGoalIdAndUserId(goalId, logId, userId)
                 .orElseThrow(() -> {
-                    log.warn("Progress log not found logId={} goalId={} userId={}", logId, goalId, userId);
+                    log.warn(
+                            "Progress log not found logId={} goalId={} userId={}",
+                            logId,
+                            goalId,
+                            userId
+                    );
                     return new ProgressLogNotFoundException(
-                            String.format(ErrorMessage.PROGRESS_LOGS_NOT_FOUND, logId)
+                            String.format(
+                                    ErrorMessage.PROGRESS_LOGS_NOT_FOUND,
+                                    logId
+                            )
                     );
                 });
     }
 
+    /**
+     * Converts hours and minutes into total minutes.
+     *
+     * @param hours   number of hours
+     * @param minutes number of minutes
+     * @return total time in minutes
+     */
     private int sumHoursAndMinutesThenConvertToMinutes(int hours, int minutes) {
         int totalMinutes = hours * 60 + minutes;
-        log.debug("Converted {} hours and {} minutes into {} total minutes", hours, minutes, totalMinutes);
+        log.debug(
+                "Converted {} hours and {} minutes into {} total minutes",
+                hours,
+                minutes,
+                totalMinutes
+        );
         return totalMinutes;
     }
 }
