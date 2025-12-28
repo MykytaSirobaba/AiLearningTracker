@@ -4,14 +4,12 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Created by Mykyta Sirobaba on 26.12.2025.
- * email mykyta.sirobaba@gmail.com
- */
-
-/**
  * Configuration properties related to frontend integration.
  * <p>
  * Contains frontend URLs used for redirects and two-factor authentication flow.
+ * <p>
+ * Created by Mykyta Sirobaba on 26.12.2025.
+ * email mykyta.sirobaba@gmail.com
  */
 @Data
 @ConfigurationProperties(prefix = "app")
