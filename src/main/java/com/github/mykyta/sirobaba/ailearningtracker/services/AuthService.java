@@ -24,8 +24,26 @@ public interface AuthService {
      */
     LoginResultDto login(LoginRequestDto request);
 
+    /**
+     * Completes the authentication process for a user with two-factor authentication enabled.
+     * <p>
+     * Verifies the provided one-time code and, if valid, returns JWT access
+     * and refresh tokens for the authenticated user.
+     *
+     * @param request DTO containing two-factor verification data
+     * @return token response containing JWT access and refresh tokens
+     */
     TokenResponseDto completeTwoFactorLogin(TwoFactorVerificationRequestDto request);
 
+    /**
+     * Refreshes an access token using a valid refresh token.
+     * <p>
+     * Generates a new access token (and optionally a new refresh token)
+     * without requiring the user to re-authenticate.
+     *
+     * @param refreshTokenRequestDto DTO containing refresh token data
+     * @return response containing a new access token and related metadata
+     */
     RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto);
 }
 

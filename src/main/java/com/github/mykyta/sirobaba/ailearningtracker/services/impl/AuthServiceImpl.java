@@ -103,6 +103,16 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    /**
+     * Completes the authentication process for a user with two-factor authentication enabled.
+     * <p>
+     * Validates the provided one-time password (OTP) using TOTP
+     * and, if successful, generates JWT access and refresh tokens.
+     *
+     * @param request DTO containing the temporary 2FA token and verification code
+     * @return token response DTO containing access and refresh tokens
+     * @throws BadCredentialsException if the provided 2FA code is invalid
+     */
     @Override
     public TokenResponseDto completeTwoFactorLogin(TwoFactorVerificationRequestDto request) {
         Long userId = jwtTool.getUserIdFrom2FaToken(request.getTwoFactorToken());
@@ -146,6 +156,17 @@ public class AuthServiceImpl implements AuthService {
         return response;
     }
 
+
+    /**
+     * Refreshes an access token using a valid refresh token.
+     * <p>
+     * Validates the refresh token, extracts the associated user,
+     * and generates a new access token without requiring re-authentication.
+     *
+     * @param refreshTokenRequestDto DTO containing the refresh token
+     * @return response DTO containing a new access token and related metadata
+     * @throws InvalidRefreshTokenException if the refresh token is invalid or expired
+     */
     @Override
     public RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
         final String refreshToken = refreshTokenRequestDto.getRefreshToken();
