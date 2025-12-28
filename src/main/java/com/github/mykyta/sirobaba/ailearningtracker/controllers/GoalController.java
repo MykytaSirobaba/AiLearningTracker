@@ -70,7 +70,7 @@ public class GoalController {
             }
     )
     @GetMapping("/{goalId}")
-    public ResponseEntity<GoalResponseDto> getGoal(@PathVariable Long goalId, @CurrentUser CurrentUserInfoDto user){
+    public ResponseEntity<GoalResponseDto> getGoal(@PathVariable Long goalId, @CurrentUser CurrentUserInfoDto user) {
         return ResponseEntity.status(HttpStatus.OK).body(goalService.getGoal(goalId, user.getId()));
     }
 
@@ -103,7 +103,7 @@ public class GoalController {
             }
     )
     @PatchMapping("/{goalId}/completed")
-    public ResponseEntity<GoalResponseDto> completeGoal(@PathVariable Long goalId, @CurrentUser CurrentUserInfoDto user){
+    public ResponseEntity<GoalResponseDto> completeGoal(@PathVariable Long goalId, @CurrentUser CurrentUserInfoDto user) {
         return ResponseEntity.status(HttpStatus.OK).body(goalService.completeGoal(goalId, user.getId()));
     }
 
@@ -121,7 +121,7 @@ public class GoalController {
     )
     @GetMapping("/goals")
     public ResponseEntity<PageResponse<GoalSummaryDto>> getAllGoals(@Parameter(hidden = true) Pageable pageable,
-                                                                    @CurrentUser CurrentUserInfoDto user){
+                                                                    @CurrentUser CurrentUserInfoDto user) {
         return ResponseEntity.status(HttpStatus.OK).body(goalService.getAllGoals(pageable, user.getId()));
     }
 
@@ -139,7 +139,7 @@ public class GoalController {
     )
     @GetMapping("/goals/completed")
     public ResponseEntity<PageResponse<GoalSummaryDto>> getAllCompletedGoals(@Parameter(hidden = true) Pageable pageable,
-                                                                             @CurrentUser CurrentUserInfoDto user){
+                                                                             @CurrentUser CurrentUserInfoDto user) {
         return ResponseEntity.status(HttpStatus.OK).body(goalService.getAllCompletedGoals(pageable, user.getId()));
     }
 }
