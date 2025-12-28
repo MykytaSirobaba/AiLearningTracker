@@ -29,13 +29,18 @@ public interface UserRepo extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     /**
-     * Finds a {@link User} entity by its username.
+     * Checks if a {@link User} with the given email exists.
      *
-     * @param username the username of the user
-     * @return an {@link Optional} containing the {@link User} if found, or empty if not found
+     * @param email the email to check
+     * @return true if a user with the email exists, false otherwise
      */
-    Optional<User> findByUsername(String username);
-
     boolean existsByEmail(String email);
+
+    /**
+     * Checks if a {@link User} with the given username exists.
+     *
+     * @param username the username to check
+     * @return true if a user with the username exists, false otherwise
+     */
     boolean existsByUsername(String username);
 }
