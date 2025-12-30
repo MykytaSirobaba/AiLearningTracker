@@ -60,8 +60,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         String accessToken = jwtTool.generateAccessToken(user);
         String refreshToken = jwtTool.generateRefreshToken(user);
-        log.info("Access token: " + accessToken);
-        log.info("Refresh token: " + refreshToken);
+        log.info("Access token: {}", accessToken);
+        log.info("Refresh token: {}", refreshToken);
 
         String redirectUrl = UriComponentsBuilder.fromUriString(frontendProperties.getFrontendUrl())
                 .queryParam("accessToken", accessToken)
@@ -69,7 +69,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 .queryParam("username", URLEncoder.encode(user.getUsername(), StandardCharsets.UTF_8))
                 .build().toUriString();
 
-        log.info("Redirect URL: " + redirectUrl);
+        log.info("Redirect URL: {}", redirectUrl);
         response.sendRedirect(redirectUrl);
     }
 }
