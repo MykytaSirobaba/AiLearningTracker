@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -53,7 +54,7 @@ public class AIAnalysisController {
     )
     @PostMapping("/{goalId}/analysis")
     public ResponseEntity<AIAnalysisDetailsDto> createAIAnalysis(@CurrentUser CurrentUserInfoDto userInfoDto,
-                                                                 @RequestBody AIAnalysisRequestDto aiAnalysisRequestDto,
+                                                                 @RequestBody @Valid AIAnalysisRequestDto aiAnalysisRequestDto,
                                                                  @PathVariable("goalId") Long goalId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(aiAnalysisService.createAIAnalysis(userInfoDto.getId(), aiAnalysisRequestDto, goalId));

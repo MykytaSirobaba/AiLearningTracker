@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,7 @@ public class GoalController {
             }
     )
     @PostMapping("/create")
-    public ResponseEntity<GoalResponseDto> createGoal(@RequestBody GoalRequestDto goalRequest,
+    public ResponseEntity<GoalResponseDto> createGoal(@RequestBody @Valid GoalRequestDto goalRequest,
                                                       @CurrentUser CurrentUserInfoDto user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(goalService.createGoal(goalRequest, user));
     }

@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ import java.io.IOException;
  * email mykyta.sirobaba@gmail.com
  */
 
-@Slf4j
 @Tag(name = "Authentication", description = "Endpoints for user authentication and registration")
 @RestController
 @RequestMapping("/auth")
@@ -49,7 +47,7 @@ public class AuthController {
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<LoginResultDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResultDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         LoginResultDto result = authService.login(loginRequestDto);
 
         if (result.isTwoFactorRequired()) {
@@ -100,7 +98,7 @@ public class AuthController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity<TokenResponseDto> register(@RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<TokenResponseDto> register(@RequestBody @Valid RegisterRequestDto registerRequestDto) {
         return ResponseEntity.ok(authService.register(registerRequestDto));
     }
 
@@ -136,7 +134,7 @@ public class AuthController {
             }
     )
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponseDto> refreshToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+    public ResponseEntity<RefreshTokenResponseDto> refreshToken(@RequestBody @Valid RefreshTokenRequestDto refreshTokenRequestDto) {
         return ResponseEntity.ok(authService.refresh(refreshTokenRequestDto));
     }
 }
