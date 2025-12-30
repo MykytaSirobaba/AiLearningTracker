@@ -4,6 +4,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.UserRes
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by Mykyta Sirobaba on 07.10.2025.
@@ -13,9 +14,13 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class TokenResponseDto {
+    @ToString.Exclude
     private String accessToken;
+    @ToString.Exclude
     private String refreshToken;
+    @ToString.Exclude
     private String tokenType;
+    @ToString.Exclude
     private Long expiresIn;
     private UserResponseDto user;
 }

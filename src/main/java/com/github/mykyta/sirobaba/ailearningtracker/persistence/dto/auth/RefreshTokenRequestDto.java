@@ -1,9 +1,9 @@
 package com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.auth;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by Mykyta Sirobaba on 26.12.2025.
@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 public class RefreshTokenRequestDto {
-    @Valid
     @NotBlank
     @Size(min = 20)
+    @ToString.Exclude
     private String refreshToken;
 }

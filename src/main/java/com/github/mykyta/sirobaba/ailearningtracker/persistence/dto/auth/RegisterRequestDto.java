@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by Mykyta Sirobaba on 07.10.2025.
@@ -17,6 +18,7 @@ public class RegisterRequestDto {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
+    @ToString.Exclude
     @NotEmpty(message = "Password cannot be empty")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$\n",
             message = "Password must be at least 8 characters, include 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character")
