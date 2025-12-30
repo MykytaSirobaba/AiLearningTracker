@@ -1,6 +1,6 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.events.goal.SubgoalCompletedEvent;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.SubgoalHasAlreadyCompleted;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.SubgoalNotFoundException;

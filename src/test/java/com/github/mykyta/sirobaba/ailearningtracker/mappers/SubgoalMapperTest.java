@@ -1,6 +1,6 @@
-package mappers;
+package com.github.mykyta.sirobaba.ailearningtracker.mappers;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.subgoal.SubGoalResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Goal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Subgoal;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static ailearningtracker.ModelUtils.*;
+import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

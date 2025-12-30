@@ -1,4 +1,4 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.configs.AiTemplateConfig;

@@ -1,4 +1,4 @@
-package ailearningtracker;
+package com.github.mykyta.sirobaba.ailearningtracker;
 
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.*;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.enums.Difficulty;

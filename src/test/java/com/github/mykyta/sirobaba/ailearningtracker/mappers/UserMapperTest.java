@@ -1,6 +1,6 @@
-package mappers;
+package com.github.mykyta.sirobaba.ailearningtracker.mappers;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.CurrentUserInfoDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.UserResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;

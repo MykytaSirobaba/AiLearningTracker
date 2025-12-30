@@ -1,6 +1,6 @@
-package mappers;
+package com.github.mykyta.sirobaba.ailearningtracker.mappers;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiAnalysisOfProgressLogDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.aianalysis.AIAnalysisDetailsDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.AIAnalysis;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static ailearningtracker.ModelUtils.*;
+import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

@@ -1,6 +1,6 @@
-package mappers;
+package com.github.mykyta.sirobaba.ailearningtracker.mappers;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.progresslog.ProgressLogDetailsResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.progresslog.ProgressLogResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.ProgressLog;
@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 
-import static ailearningtracker.ModelUtils.*;
+import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

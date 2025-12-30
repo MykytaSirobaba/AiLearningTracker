@@ -1,4 +1,4 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiAnalysisOfProgressLogDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.aianalysis.AIAnalysisDetailsDto;
@@ -10,9 +10,6 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.AIAnalysi
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Goal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.AIAnalysisMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.AIAnalysisRepo;
-import com.github.mykyta.sirobaba.ailearningtracker.services.AIService;
-import com.github.mykyta.sirobaba.ailearningtracker.services.GoalService;
-import com.github.mykyta.sirobaba.ailearningtracker.services.ProgressLogService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.impl.AIAnalysisServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,8 +27,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static ailearningtracker.ModelUtils.createTestAIAnalysis;
-import static ailearningtracker.ModelUtils.createTestGoal;
+import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.createTestAIAnalysis;
+import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.createTestGoal;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

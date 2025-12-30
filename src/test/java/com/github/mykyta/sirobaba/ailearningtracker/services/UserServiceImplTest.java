@@ -1,6 +1,6 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.UserNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.UserRepo;

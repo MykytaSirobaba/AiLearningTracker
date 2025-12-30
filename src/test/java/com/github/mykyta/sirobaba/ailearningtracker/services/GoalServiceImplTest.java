@@ -1,6 +1,6 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.events.goal.SubgoalCompletedEvent;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.GoalHasAlreadyCompleted;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.MissingDataException;
@@ -14,9 +14,6 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Subgoal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.GoalMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.GoalRepo;
-import com.github.mykyta.sirobaba.ailearningtracker.services.AIService;
-import com.github.mykyta.sirobaba.ailearningtracker.services.SubgoalService;
-import com.github.mykyta.sirobaba.ailearningtracker.services.UserService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.impl.GoalServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

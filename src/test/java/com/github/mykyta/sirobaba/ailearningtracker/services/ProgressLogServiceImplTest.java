@@ -1,6 +1,6 @@
-package ailearningtracker.services;
+package com.github.mykyta.sirobaba.ailearningtracker.services;
 
-import ailearningtracker.ModelUtils;
+import com.github.mykyta.sirobaba.ailearningtracker.ModelUtils;
 import com.github.mykyta.sirobaba.ailearningtracker.exceptions.exceptions.ProgressLogNotFoundException;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.progresslog.ProgressLogContentDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.progresslog.ProgressLogDetailsResponseDto;
@@ -11,7 +11,6 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Goal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.ProgressLog;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.ProgressLogMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.ProgressLogRepo;
-import com.github.mykyta.sirobaba.ailearningtracker.services.GoalService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.impl.ProgressLogServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
