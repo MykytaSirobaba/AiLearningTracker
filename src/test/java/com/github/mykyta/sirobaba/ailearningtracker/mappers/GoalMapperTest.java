@@ -7,10 +7,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Goal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.GoalMapper;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.GoalMapperImpl;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.SubgoalMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mapstruct.factory.Mappers;
 
 import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.*;
@@ -20,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Mykyta Sirobaba on 18.11.2025.
  * email mykyta.sirobaba@gmail.com
  */
+@Tag("Mapper")
 @DisplayName("GoalMapper Tests")
 class GoalMapperTest {
 

@@ -7,6 +7,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.Subgoal;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.SubgoalMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Mykyta Sirobaba on 18.11.2025.
  * email mykyta.sirobaba@gmail.com
  */
+@Tag("Mapper")
 @DisplayName("SubgoalMapper Tests")
 class SubgoalMapperTest {
 

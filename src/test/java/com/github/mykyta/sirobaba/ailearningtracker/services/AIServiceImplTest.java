@@ -15,6 +15,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.enums.Dif
 import com.github.mykyta.sirobaba.ailearningtracker.services.impl.AIServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -37,6 +38,8 @@ import static org.mockito.Mockito.when;
  * Created by Mykyta Sirobaba on 12.11.2025.
  * email mykyta.sirobaba@gmail.com
  */
+@Tag("Service")
+@DisplayName("Artificial intelligence service test")
 @ExtendWith(MockitoExtension.class)
 class AIServiceImplTest {
 

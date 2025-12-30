@@ -15,6 +15,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.services.ProgressLogService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,9 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by Mykyta Sirobaba on 30.12.2025.
  * email mykyta.sirobaba@gmail.com
  */
-
+@Tag("Controller")
 @AutoConfigureMockMvc
 @WebMvcTest(ProgressLogController.class)
+@DisplayName("Progress log controller test")
 @Import({WebMvcConfig.class, UserArgumentResolver.class})
 class ProgressLogControllerTest {
 

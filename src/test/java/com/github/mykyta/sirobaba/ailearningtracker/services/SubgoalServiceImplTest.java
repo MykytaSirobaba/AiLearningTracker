@@ -12,6 +12,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.repository.Subgo
 import com.github.mykyta.sirobaba.ailearningtracker.services.impl.SubgoalServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Tag("Service")
+@DisplayName("Subgoal service test")
 @ExtendWith(MockitoExtension.class)
 class SubgoalServiceImplTest {
 

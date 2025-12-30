@@ -5,10 +5,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.ai.AiAnalysi
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.aianalysis.AIAnalysisDetailsDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.AIAnalysis;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.AIAnalysisMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mapstruct.factory.Mappers;
 
 import static com.github.mykyta.sirobaba.ailearningtracker.ModelUtils.*;
@@ -18,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Mykyta Sirobaba on 18.11.2025.
  * email mykyta.sirobaba@gmail.com
  */
+@Tag("Mapper")
 @DisplayName("AIAnalysisMapper Tests")
 class AIAnalysisMapperTest {
 

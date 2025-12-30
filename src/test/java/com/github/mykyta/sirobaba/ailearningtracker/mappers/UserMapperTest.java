@@ -5,10 +5,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.Current
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.dto.user.UserResponseDto;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.entity.User;
 import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.UserMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mapstruct.factory.Mappers;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Mykyta Sirobaba on 18.11.2025.
  * email mykyta.sirobaba@gmail.com
  */
+@Tag("Mapper")
 @DisplayName("UserMapper Tests")
 class UserMapperTest {
 
