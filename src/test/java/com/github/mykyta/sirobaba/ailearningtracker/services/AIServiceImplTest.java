@@ -17,10 +17,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.client.ChatClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,8 +40,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AIServiceImplTest {
 
-    @Mock
-    private ChatModel chatModel;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private ChatClient chatClient;
     @Mock
     private AiTemplateConfig aiTemplateConfig;
     @Mock
@@ -73,9 +74,7 @@ class AIServiceImplTest {
         String aiMainResponse = "{\"generalGoal\":\"Master Spring Boot\",\"difficulty\":\"MEDIUM\"}";
         String aiSubResponse = "{\"subGoals\":[{\"title\":\"Learn Basics\",\"difficulty\":\"EASY\",\"estimatedHours\":10}]}";
 
-        when(chatModel.call(anyString()))
-                .thenReturn(aiMainResponse)
-                .thenReturn(aiSubResponse);
+        when(chatClient.prompt(anyString()).call().content()).thenReturn(aiMainResponse).thenReturn(aiSubResponse);
 
         GoalAiResultDto mainGoalResult = GoalAiResultDto.builder()
                 .generalGoal("Master Spring Boot")
@@ -107,7 +106,7 @@ class AIServiceImplTest {
     @DisplayName("createLearningPlan() — should throw AiJsonParseException if AI response cannot be parsed")
     void createLearningPlan_shouldThrowWhenJsonInvalid() throws Exception {
         when(aiTemplateConfig.getTemplate("createMainGoal")).thenReturn("template");
-        when(chatModel.call(anyString())).thenReturn("{invalid_json");
+        when(chatClient.prompt(anyString()).call().content()).thenReturn("{invalid_json");
 
         when(objectMapper.readValue(anyString(), eq(GoalAiResultDto.class)))
                 .thenThrow(new RuntimeException("JSON parse error"));
@@ -126,7 +125,7 @@ class AIServiceImplTest {
         when(aiTemplateConfig.getTemplate("createMainGoal")).thenReturn("template");
         when(aiTemplateConfig.getTemplate("createSubgoal")).thenReturn("template");
 
-        when(chatModel.call(anyString()))
+        when(chatClient.prompt(anyString()).call().content())
                 .thenReturn(aiMainResponse)
                 .thenReturn(aiSubResponse);
 
@@ -159,7 +158,7 @@ class AIServiceImplTest {
         when(aiTemplateConfig.getTemplate("createAnalysisProgressLogs")).thenReturn(template);
 
         String aiResponse = "{\"title\":\"Progress Summary\",\"analysisText\":\"Good progress overall\"}";
-        when(chatModel.call(anyString())).thenReturn(aiResponse);
+        when(chatClient.prompt(anyString()).call().content()).thenReturn(aiResponse);
 
         AiAnalysisOfProgressLogDto dto = AiAnalysisOfProgressLogDto.builder()
                 .title("Progress Summary")
@@ -188,7 +187,7 @@ class AIServiceImplTest {
         when(aiTemplateConfig.getTemplate("createAnalysisProgressLogs")).thenReturn(template);
 
         String invalidJson = "{not-valid-json";
-        when(chatModel.call(anyString())).thenReturn(invalidJson);
+        when(chatClient.prompt(anyString()).call().content()).thenReturn(invalidJson);
         when(objectMapper.readValue(anyString(), eq(AiAnalysisOfProgressLogDto.class)))
                 .thenThrow(new RuntimeException("Parse error"));
 
