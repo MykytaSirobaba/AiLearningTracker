@@ -11,6 +11,7 @@ import com.github.mykyta.sirobaba.ailearningtracker.persistence.mapper.UserMappe
 import com.github.mykyta.sirobaba.ailearningtracker.security.jwt.JwtTool;
 import com.github.mykyta.sirobaba.ailearningtracker.security.totp.TotpService;
 import com.github.mykyta.sirobaba.ailearningtracker.services.AuthService;
+import com.github.mykyta.sirobaba.ailearningtracker.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +33,7 @@ import java.util.UUID;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTool jwtTool;
     private final AuthenticationManager authenticationManager;
