@@ -24,8 +24,8 @@ import java.util.List;
  * Handles creating, linking, and completing subgoals, as well as publishing events
  * when subgoals are completed.
  */
-@Service
 @Slf4j
+@Service
 @AllArgsConstructor
 public class SubgoalServiceImpl implements SubgoalService {
 

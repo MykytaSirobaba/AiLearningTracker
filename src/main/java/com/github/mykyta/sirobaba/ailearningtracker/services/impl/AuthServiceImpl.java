@@ -28,9 +28,9 @@ import java.util.UUID;
  * Provides functionality to register new users, login existing users,
  * and generate JWT tokens.
  */
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
@@ -83,6 +83,7 @@ public class AuthServiceImpl implements AuthService {
         );
 
         User user = userService.findByEmail(request.getEmail());
+        log.debug("User with email={} found", user.getEmail());
 
         if (user.isTwoFactorEnabled()) {
             log.info("2FA enabled for user id={}, requiring second step.", user.getId());
@@ -97,6 +98,7 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Login successful (no 2FA required) for user id={}", user.getId());
         TokenResponseDto tokens = buildTokenResponse(user);
+        log.debug("Tokens for user id={}", user.getId());
 
         return LoginResultDto.builder()
                 .tokens(tokens)
@@ -116,6 +118,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public TokenResponseDto completeTwoFactorLogin(TwoFactorVerificationRequestDto request) {
+        log.info("The beginning of the end of two-factor authentication");
         Long userId = jwtTool.getUserIdFrom2FaToken(request.getTwoFactorToken());
 
         User user = userService.findById(userId);
@@ -126,9 +129,11 @@ public class AuthServiceImpl implements AuthService {
         );
 
         if (!isCodeValid) {
+            log.warn("Two-factor authentication failed for user id={}", userId);
             throw new BadCredentialsException(ErrorMessage.INVALID_2FA_CODE);
         }
 
+        log.info("Two-factor authentication successful for user id={}", userId);
         return buildTokenResponse(user);
     }
 
@@ -170,9 +175,12 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
+        log.info("Refresh JWT token");
         final String refreshToken = refreshTokenRequestDto.getRefreshToken();
         final User user = userService.findByEmail(jwtTool.extractEmail(refreshToken));
+        log.debug("Find user with email={}", user.getEmail());
         if (jwtTool.validateRefreshToken(refreshToken, user)) {
+            log.info("Successfully refreshed token for user id={}", user.getId());
             return RefreshTokenResponseDto.builder()
                     .accessToken(jwtTool.generateAccessToken(user))
                     .refreshToken(refreshToken)

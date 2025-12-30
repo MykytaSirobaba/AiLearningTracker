@@ -30,8 +30,8 @@ import java.util.List;
  * Provides functionality to create, retrieve, delete, and fetch progress log content.
  * Progress logs are always scoped to a specific goal and user.
  */
-@Service
 @Slf4j
+@Service
 @AllArgsConstructor
 public class ProgressLogServiceImpl implements ProgressLogService {
 

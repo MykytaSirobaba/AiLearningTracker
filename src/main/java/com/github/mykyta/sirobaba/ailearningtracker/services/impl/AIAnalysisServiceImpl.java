@@ -32,8 +32,8 @@ import java.util.List;
  * It integrates with ProgressLogService, GoalService, and AIService to analyze progress
  * logs, map results, and persist them in the repository.
  */
-@Service
 @Slf4j
+@Service
 @AllArgsConstructor
 public class AIAnalysisServiceImpl implements AIAnalysisService {
 

@@ -36,9 +36,9 @@ import java.util.List;
  * Handles creation, completion, retrieval, deletion, and pagination of goals.
  * Integrates with AIService for generating study plans and SubgoalService for managing subgoals.
  */
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class GoalServiceImpl implements GoalService {
 
     private final AIService aiService;

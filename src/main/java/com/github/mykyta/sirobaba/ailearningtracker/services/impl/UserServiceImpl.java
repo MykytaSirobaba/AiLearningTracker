@@ -23,8 +23,8 @@ import java.time.Instant;
  * Handles user retrieval, creation, and two-factor authentication lifecycle
  * including setup, activation, and disabling.
  */
-@Service
 @Slf4j
+@Service
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
@@ -67,19 +67,22 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public TwoFactorSetupResponseDto setupTwoFactor(Long userId) {
+        log.info("Setup two-factor activation request for user id={}", userId);
         User user = findById(userId);
-
+        log.debug("User found id: {}", user.getId());
         String secret = totpService.generateNewSecret();
 
         user.setTwoFactorSecret(secret);
         user.setTwoFactorSecretCreatedAt(Instant.now());
         userRepo.save(user);
+        log.debug("Two-factor activation request succeeded for user id={}", userId);
 
         String issuer = "AI Learning Tracker";
         String qrCodeUrl = "otpauth://totp/"
                            + issuer + ":" + user.getEmail()
                            + "?secret=" + secret + "&issuer=" + issuer;
 
+        log.info("Two-factor activation request succeeded");
         return new TwoFactorSetupResponseDto(secret, qrCodeUrl);
     }
 
@@ -100,13 +103,16 @@ public class UserServiceImpl implements UserService {
     public void activateTwoFactor(TwoFactorActivationRequestDto request, Long id) {
         User user = findById(id);
         String storedSecret = user.getTwoFactorSecret();
+        log.debug("Activating two-factor activation request for user id={}", id);
 
         isStoredSecretNull(storedSecret);
         isTwoFactorEnabled(user.isTwoFactorEnabled());
         checkAndCleanExpiredSetup(user.getTwoFactorSecretCreatedAt(), user);
         isCodeValid(storedSecret, request.getCode());
+        log.info("Validation successful for user id={}", id);
 
         user.setTwoFactorEnabled(true);
+        log.debug("Two-factor enabled for user id={} ", id);
         userRepo.save(user);
     }
 
@@ -124,6 +130,7 @@ public class UserServiceImpl implements UserService {
     public void disable2Fa(TwoFactorActivationRequestDto request, Long id) {
         User user = findById(id);
         if (!user.isTwoFactorEnabled()) {
+            log.warn("Two-factor activation request for user id={}", id);
             throw new TwoFactorNotEnabledException(ErrorMessage.TWO_FACTOR_NOT_ENABLED);
         }
         isCodeValid(user.getTwoFactorSecret(), request.getCode());
@@ -131,6 +138,7 @@ public class UserServiceImpl implements UserService {
         user.setTwoFactorEnabled(false);
         user.setTwoFactorSecret(null);
         user.setTwoFactorSecretCreatedAt(null);
+        log.debug("Two-factor disable for user id: {}", id);
         userRepo.save(user);
     }
 
