@@ -180,7 +180,7 @@ class AuthControllerTest {
     void registerShouldReturnOk() throws Exception {
         RegisterRequestDto requestDto = new RegisterRequestDto();
         requestDto.setEmail("new@example.com");
-        requestDto.setPassword("pass");
+        requestDto.setPassword("Password123@");
         requestDto.setUsername("newuser");
 
         UserResponseDto userDto = UserResponseDto.builder().id(2L).email("new@example.com").build();
