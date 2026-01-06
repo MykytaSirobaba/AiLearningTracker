@@ -26,7 +26,6 @@ import java.time.Instant;
 @Slf4j
 @Service
 @AllArgsConstructor
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
@@ -66,6 +65,7 @@ public class UserServiceImpl implements UserService {
      * @return DTO containing secret key and QR code URL
      */
     @Override
+    @Transactional
     public TwoFactorSetupResponseDto setupTwoFactor(Long userId) {
         log.info("Setup two-factor activation request for user id={}", userId);
         User user = findById(userId);
@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
      * @throws Invalid2FaTokenException         if provided code is invalid
      */
     @Override
+    @Transactional
     public void activateTwoFactor(TwoFactorActivationRequestDto request, Long id) {
         User user = findById(id);
         String storedSecret = user.getTwoFactorSecret();
@@ -127,6 +128,7 @@ public class UserServiceImpl implements UserService {
      * @throws Invalid2FaTokenException     if provided code is invalid
      */
     @Override
+    @Transactional
     public void disable2Fa(TwoFactorActivationRequestDto request, Long id) {
         User user = findById(id);
         if (!user.isTwoFactorEnabled()) {

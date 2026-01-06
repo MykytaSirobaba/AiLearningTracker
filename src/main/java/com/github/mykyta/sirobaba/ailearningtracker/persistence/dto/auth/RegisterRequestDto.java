@@ -20,7 +20,7 @@ public class RegisterRequestDto {
 
     @ToString.Exclude
     @NotEmpty(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$\n",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?=\\S+$).{8,}$",
             message = "Password must be at least 8 characters, include 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character")
     private String password;
 }
