@@ -12,6 +12,10 @@ Unlike standard to-do lists, this application focuses on the **quality** of lear
 
 The project follows a **Client-Server architecture** with a decoupled frontend and is fully containerized using Docker.
 
+> **Important:** This repository contains only the Backend code. If you want to use it with the user interface, you should clone this repository.
+>
+> **Frontend Repository:** [https://github.com/MykytaSirobaba/AiLearningTrackerUI.git](https://github.com/MykytaSirobaba/AiLearningTrackerUI.git)
+
 ## Key Features
 
 ### 1. AI-Powered Goal Planning
