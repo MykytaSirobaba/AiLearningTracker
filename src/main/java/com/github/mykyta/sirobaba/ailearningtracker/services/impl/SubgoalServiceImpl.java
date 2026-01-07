@@ -81,8 +81,11 @@ public class SubgoalServiceImpl implements SubgoalService {
         }
 
         List<Subgoal> subgoals = subGoalDtos.stream()
-                .map(subGoalMapper::toSubGoal)
-                .peek(subGoal -> subGoal.setGoal(parentGoal))
+                .map(dto -> {
+                    Subgoal subGoal = subGoalMapper.toSubGoal(dto);
+                    subGoal.setGoal(parentGoal);
+                    return subGoal;
+                })
                 .toList();
 
         log.info("Created {} subgoals for parent goal {}", subgoals.size(), parentGoal.getId());
